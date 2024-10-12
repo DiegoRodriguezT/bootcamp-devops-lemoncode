@@ -2,8 +2,8 @@
 
 WEB=https://lemoncode.net
 
-SALIDA=$(curl -s $WEB | grep -i -n "$1")
-COUNT=$(echo -n "$SALIDA" | wc -l)
+SALIDA=$(curl -s $WEB | grep -i -o -n "$1")
+COUNT=$(grep -c ":" <<< $SALIDA)
 
 if [ $COUNT -eq 0 ]; then
 	echo "No se ha encontrado la palabra $1"
