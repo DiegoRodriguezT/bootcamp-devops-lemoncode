@@ -46,4 +46,4 @@
 ```
 
 Resultado: 
-![alt](https://cdn.rdgz.dev/view/chrome_rbrMjEQaZA.png)
+![](resultado.png)
