@@ -54,6 +54,7 @@ Resultado:
 ## Ejercicio 2
 
 Para levantar el entorno: `docker compose up`
+
 Para eliminar el entorno: `docker compose down`
 
 ```yaml
