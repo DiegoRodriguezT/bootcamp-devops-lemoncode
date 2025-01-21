@@ -10,7 +10,7 @@
 ```bash
     docker run -d --rm --name some-mongo \
       --network lemoncode-challenge \
-      -v db_data:/data/db \
+      --mount type=volume,src=db_data,dst=/data/db \
       -p 27017:27017 \
       mongo:latest
 ```
