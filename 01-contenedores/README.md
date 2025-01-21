@@ -1,4 +1,6 @@
 
+## Ejercicio 1
+
 1. Creación de la red y del volumen para mongo
 ```bash
     docker network create lemoncode-challenge
@@ -24,7 +26,7 @@
     -v db_data:/data/db \
     mongo:latest
 ```
-4. Build del backend ([Dockerfile](backend/Dockerfile)) y creación del contenedor con el archivo [.env](backend/.env)
+1. Build del backend ([Dockerfile](backend/Dockerfile)) y creación del contenedor con el archivo [.env](backend/.env)
 ```bash
     docker build -t node-backend ./backend
 
@@ -34,7 +36,7 @@
       node-backend
 ```
 
-5. Build del frontend ([Dockerfile](frontend/Dockerfile)) y levantar el contenedor
+1. Build del frontend ([Dockerfile](frontend/Dockerfile)) y levantar el contenedor
 ```bash
     docker build -t node-frontend ./frontend
 
@@ -46,4 +48,47 @@
 ```
 
 Resultado: 
+
 ![](resultado.png)
+
+## Ejercicio 2
+
+```yaml
+services:
+  some-mongo:
+    image: mongo:latest
+    networks: 
+      - lemoncode-challenge
+    volumes:
+      - db_data:/data/db
+  
+  topics-api:
+    depends_on: 
+      - some-mongo
+    build: 
+      context: ./backend
+    networks:
+      - lemoncode-challenge
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - HOST=${HOST}
+      - PORT=${PORT}
+
+  frontend: 
+    build:
+      context: ./frontend
+    networks: 
+      - lemoncode-challenge
+    ports:
+      - 8080:3000
+    environment:
+      API_URI: "http://topics-api:5000/api/topics"
+
+networks:
+  lemoncode-challenge:
+    driver: bridge
+
+volumes:
+  db_data:
+```

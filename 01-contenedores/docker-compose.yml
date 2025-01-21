@@ -1,0 +1,37 @@
+services:
+  some-mongo:
+    image: mongo:latest
+    networks: 
+      - lemoncode-challenge
+    volumes:
+      - db_data:/data/db
+  
+  topics-api:
+    depends_on: 
+      - some-mongo
+    build: 
+      context: ./backend
+    networks:
+      - lemoncode-challenge
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - HOST=${HOST}
+      - PORT=${PORT}
+
+  frontend: 
+    build:
+      context: ./frontend
+    networks: 
+      - lemoncode-challenge
+    ports:
+      - 8080:3000
+    environment:
+      API_URI: "http://topics-api:5000/api/topics"
+
+networks:
+  lemoncode-challenge:
+    driver: bridge
+
+volumes:
+  db_data:
